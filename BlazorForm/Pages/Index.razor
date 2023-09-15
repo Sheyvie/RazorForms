@@ -1,0 +1,75 @@
+﻿@page "/"
+
+<EditForm Model ="user" OnValidSubmit="formSubmit">
+
+    <DataAnnotationsValidator/>
+
+    <label> Name</label>
+<InputText @bind-Value="@user.Name" class="form-control"/>
+
+    <ValidationMessage For="(()=>user.Name)" />
+
+    <label> Email</label>
+    <InputText @bind-Value="@user.Email" class="form-control" />
+
+    <label> Password</label>
+    <InputText @bind-Value="@user.Password" class="form-control" />
+
+    <label> Age</label>
+    <InputNumber @bind-Value="@user.Age" class="form-control" />
+
+    <label>Gender</label>
+    <InputSelect @bind-Value="@user.Gender" class="form-control">
+        <option selected>Your Gender</option>
+       @foreach( var gender in genders)
+       {
+        <option value="@gender">@gender</option>
+       } 
+    </InputSelect>
+
+    
+        <InputRadioGroup @bind-Value="@user.Gender" >
+        @foreach (var gender in genders)
+        {
+            <InputRadio  Value="gender"/>@gender
+        }
+        
+        </InputRadioGroup>
+        @{
+            var i = 0;
+        }
+    @foreach(var role in user.role)
+    {
+        i++;
+
+        role.Id = i;
+
+        <label>Role</label>
+        <InputText @bind-Value= "@role.UserRole" class="form-control"></InputText>
+        <ValidationMessage For="(()=>role.UserRole)" />
+    }
+
+    <button type="button" onclick="@(()=>user.role.Add(new Role()))" class=" mt-5 btn btn-primary">Add Role</button>
+
+    @* if you have two buttons, only one can have the type submit*@
+    <button type="submit" class=" mt-5 btn btn-primary">Submit</button>
+    <button type="submit1" class=" mt-5 btn btn-secondary">Reset</button>
+ 
+
+</EditForm>
+
+@code{
+    public UserDto user = new UserDto();
+    private List<string> genders = new List<string>(){
+        "Female",
+        "Male",
+        "Others"
+    };
+    private void formSubmit()
+    {
+        Console.WriteLine(user.Name);
+        Console.WriteLine(user.Email);
+        Console.WriteLine(user.Password);
+        Console.WriteLine(user.Age);
+    }
+}
